@@ -6,15 +6,9 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Navigate } from 'react-router-dom';
 
 
 export default function ButtonAppBar() {
-
-    function logout() {
-        <Navigate to="/"></Navigate>
-    }
-
     const dashboard = (
         <React.Fragment>
             <AppBar position="static">
@@ -31,10 +25,8 @@ export default function ButtonAppBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Dashboard
                     </Typography>
-                    <Button color="inherit" onClick={() => alert('hello')}>
-                        <Navigate to="/">
-                            Log out
-                        </Navigate>
+                    <Button color="inherit">
+                        Log out
                     </Button>
                 </Toolbar>
             </AppBar>
