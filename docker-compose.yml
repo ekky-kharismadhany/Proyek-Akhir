@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  app: 
+    container_name: client
+    image: client
+    build: 
+      context: ./frontend
+      target: development
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000    
