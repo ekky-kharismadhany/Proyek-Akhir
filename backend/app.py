@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 import json
 
-from services.handleClassification import handleClassification
+from backend.services.ClassificationService import handleClassification
 from services.LocationService import LocationService
 
 app = Flask(__name__)
@@ -19,12 +19,14 @@ def loads_csv():
     payload = {"message": result}
     return json.dumps(payload)
 
-@app.route("/location")
+@app.route("/location", methods=['GET', 'POST'])
 def location():
     location = LocationService(ip="8.8.8.8")
-    location.get_location_by_ip()
-    location = location.get_map_location()
-    return jsonify(location)
+    if request.method == 'GET':
+        return jsonify(location.get_map_location())
+    else:
+        respond = location.get_location_by_ip()
+        return jsonify(respond)
 
 
 if __name__ == "__main__":
