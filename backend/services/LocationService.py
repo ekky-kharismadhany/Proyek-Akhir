@@ -1,11 +1,14 @@
 import requests
 
+from pattern.SingletonMeta import SingletonMeta
 
-class LocationService:
-    def __init__(self, ip: str) -> None:
+
+class LocationService(metaclass=SingletonMeta):
+    def __init__(self, ip:str = "") -> None:
+        print(ip)
         self.ip: str = ip
-        self.latitude: str = None
-        self.longitude: str = None
+        self.latitude: str = ""
+        self.longitude: str = ""
 
     def set_latitude(self, latitide: str):
         self.latitude = latitide
@@ -18,6 +21,12 @@ class LocationService:
 
     def get_longitude(self):
         return self.longitude
+
+    def set_ip(self, ip:str):
+        self.ip = ip
+
+    def get_ip(self):
+        return self.ip
 
     def get_location_by_ip(self):
         respond = requests.get("https://ipwhois.app/json/" + self.ip)
