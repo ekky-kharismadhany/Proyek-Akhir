@@ -4,11 +4,6 @@ from pattern.SingletonMeta import SingletonMeta
 
 
 class LocationService(metaclass=SingletonMeta):
-    def __init__(self, ip:str = "") -> None:
-        print(ip)
-        self.ip: str = ip
-        self.latitude: str = ""
-        self.longitude: str = ""
 
     def set_latitude(self, latitide: str):
         self.latitude = latitide
@@ -28,17 +23,15 @@ class LocationService(metaclass=SingletonMeta):
     def get_ip(self):
         return self.ip
 
-    def get_location_by_ip(self):
+    def set_location_by_ip(self):
         respond = requests.get("https://ipwhois.app/json/" + self.ip)
         if respond.ok and respond.status_code == 200:
             json_data = respond.json()
             self.set_latitude(json_data['latitude'])
             self.set_longitude(json_data['longitude'])
-            return {'status': True}
         else:
             self.longitude("")
             self.longitude("")
-            return {'status': False}
 
     def get_map_location(self):
         payload = {
