@@ -2,8 +2,10 @@ from pattern.SingletonMeta import SingletonMeta
 from werkzeug.utils import secure_filename
 from os.path import join
 from flask import current_app
+from io import StringIO
+import csv
 
-class UploadService(metaclass=SingletonMeta):
+class FileService(metaclass=SingletonMeta):
 
     def __init__(self):
         self.ALLOWED_EXTENSIONS = {'txt', 'csv'}
@@ -20,3 +22,9 @@ class UploadService(metaclass=SingletonMeta):
             return True, "Upload success"
         else:
             return False, "Upload failed"
+
+    def csv_handler(self, result):
+        io = StringIO()
+        cw = csv.writer(io)
+        cw.writerows([result])
+        return io.getvalue()

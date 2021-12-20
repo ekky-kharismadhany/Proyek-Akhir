@@ -1,20 +1,20 @@
-from pandas.core.frame import DataFrame
-from pandas.io.parsers import TextFileReader
 import piskle
-from pandas import read_csv
+from pandas import read_csv, Series
 import numpy as np  
 import os
+from .FileService import FileService
 
 class ClassificationService:
 
     def __init__(self) -> None:
-        self.dataset: DataFrame = None
+        self.dataset = None
         self.result = None
+        self.csv_file = None
 
     def load_csv(self):
-        filepath: str = os.getcwd() + "/model/train_set.csv"
+        filepath: str = f"{os.getcwd()}/uploads/sampled_1000_dataset.csv"
         self.dataset = read_csv(filepath)
-        self.dataset = self.dataset.drop("['Unnamed: 0'], axis=1", axis=1)
+        self.dataset = self.dataset.drop(['Unnamed: 0'], axis=1)
 
     def tanH_scaler(self, df):
         scaled_df = df.copy()
@@ -29,8 +29,14 @@ class ClassificationService:
 
 
     def predict(self):
-        model = piskle.load(os.getcwd + "/model/gini_model.pskl")
+        fs = FileService()
+        model = piskle.load(f"{os.getcwd()}/model/decision_tree.pskl")
         self.result = model.predict(self.dataset)
+        self.result = fs.csv_handler(self.result)
+
 
     def get_result(self):
+        self.load_csv()
+        self.normalize()
+        self.predict()
         return self.result

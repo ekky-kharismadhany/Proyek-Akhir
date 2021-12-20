@@ -1,7 +1,8 @@
 from logging import error
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
+from services.ClassificationService import ClassificationService
 from services.LocationService import LocationService
-from services.UploadService import UploadService
+from services.FileService import FileService
 import os
 
 app = Flask(__name__)
@@ -16,13 +17,22 @@ def index():
 @app.route("/classification/csv", methods=['POST'])
 def upload_csv():
     if request.files:
-        upload_service = UploadService()
+        file_service = FileService()
         file = request.files['filename']
-        status, message = upload_service.upload_handler(file)
+        status, message = file_service.upload_handler(file)
         return jsonify({
             'status': status,
             'message': message
             })
+
+@app.route("/classification")
+def classify():
+    classification_service = ClassificationService()
+    result = classification_service.get_result()
+    response = make_response(result)
+    response.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    response.headers["Content-type"] = "text/csv"
+    return response
 
 
 @app.route("/location", methods=['POST'])
