@@ -17,7 +17,7 @@ function DashboardScreen() {
                 </Grid>
             </Grid>
             <Grid>
-                <NetworkChart></NetworkChart>
+                {/* <NetworkChart></NetworkChart> */}
             </Grid>
         </div>
     )
