@@ -1,5 +1,6 @@
 from logging import error
 from flask import Flask, request, jsonify, make_response
+from scipy.sparse import csc
 from services.ClassificationService import ClassificationService
 from services.LocationService import LocationService
 from services.FileService import FileService
@@ -14,25 +15,37 @@ def index():
     return jsonify(welcome)
 
 
-@app.route("/classification/csv", methods=['POST'])
+@app.route("/classification/csv", methods=['GET', 'POST'])
 def upload_csv():
-    if request.files:
-        file_service = FileService()
-        file = request.files['filename']
-        status, message = file_service.upload_handler(file)
+    if request.method == 'POST':
+        if request.files:
+            file_service = FileService()
+            file = request.files['filename']
+            status, message = file_service.upload_handler(file)
+            return jsonify({
+                'status': status,
+                'message': message
+                })
         return jsonify({
-            'status': status,
-            'message': message
-            })
+            'status': False,
+            'message': 'No file uploaded'
+        })
+    else:
+        classification_service = ClassificationService()
+        result = classification_service.get_result()
+        response = make_response(result)
+        response.headers["Content-Disposition"] = "attachment; filename=export.csv"
+        response.headers["Content-type"] = "text/csv"
+        return response
 
 @app.route("/classification")
 def classify():
     classification_service = ClassificationService()
-    result = classification_service.get_result()
-    response = make_response(result)
-    response.headers["Content-Disposition"] = "attachment; filename=export.csv"
-    response.headers["Content-type"] = "text/csv"
-    return response
+    return jsonify({
+        'status' : True,
+        'result' : classification_service.get_result_by_attack_type(),
+        'metric': classification_service.get_metric()
+    })
 
 
 @app.route("/location", methods=['POST'])

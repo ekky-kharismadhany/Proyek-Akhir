@@ -1,7 +1,7 @@
+from enum import Enum
 import requests
 
 from pattern.SingletonMeta import SingletonMeta
-
 
 class LocationService(metaclass=SingletonMeta):
 
@@ -17,7 +17,7 @@ class LocationService(metaclass=SingletonMeta):
     def get_longitude(self):
         return self.longitude
 
-    def set_ip(self, ip:str):
+    def set_ip(self, ip: str):
         self.ip = ip
 
     def get_ip(self):
