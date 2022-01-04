@@ -7,6 +7,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function OutlinedCard(props) {
+
+    let value = "";
+    if (props.count !== undefined) {
+        value = props.count;
+    }
+
     return (
         <Box sx={{ minWidth: 275 }} pt={2}>
             <Card variant="outlined">
@@ -15,7 +21,7 @@ export default function OutlinedCard(props) {
                         {props.title}
                     </Typography>
                     <Typography>
-                        {1000}
+                        {value}
                     </Typography>
                 </CardContent>
                 <CardActions>
