@@ -1,10 +1,11 @@
 import piskle
 from pandas import read_csv
 from enum import Enum, auto
-import numpy as np  
+import numpy as np
 import os
 
 from .MetricService import MetricService
+
 
 class AttackType(Enum):
     Benign = auto()
@@ -18,6 +19,7 @@ class AttackType(Enum):
     BruteForce_Web = auto()
     BruteForce_XSS = auto()
     SQL_Injection = auto()
+
 
 class ClassificationService:
 
@@ -37,18 +39,16 @@ class ClassificationService:
         scaled_df = df.copy()
         for col in df.columns:
             if scaled_df[col].std() != 0.0:
-                scaled_df[col] = 0.5*(np.tanh(0.01*((scaled_df[col] - np.mean(scaled_df[col]) / np.std(scaled_df[col]))))+1)
+                scaled_df[col] = 0.5*(np.tanh(0.01*((scaled_df[col] -
+                                      np.mean(scaled_df[col]) / np.std(scaled_df[col]))))+1)
         return scaled_df
-
 
     def normalize(self):
         self.dataset = self.tanH_scaler(self.dataset)
 
-
     def predict(self):
         model = piskle.load(f"{os.getcwd()}/model/decision_tree.pskl")
         return model.predict(self.dataset)
-
 
     def get_result(self):
         self.load_csv()
@@ -66,19 +66,19 @@ class ClassificationService:
             'precision': precision
         }
 
-
     def get_result_by_attack_type(self):
         result = np.array(self.get_result())
         return {
-            AttackType.Benign.name: int((result == AttackType.Benign.value - 1).sum()),
-            AttackType.FTP_Bruteforce.name: int((result == AttackType.Benign.value - 1).sum()),
-            AttackType.SSH_BruteForce.name: int((result == AttackType.SSH_BruteForce.value - 1).sum()),
-            AttackType.DDOS_Attack_HOIC.name: int((result == AttackType.DDOS_Attack_HOIC.value - 1).sum()),
-            AttackType.Bot.name: int((result == AttackType.Bot.value - 1).sum()),
-            AttackType.DoS_Attack_Golden_Eye.name: int((result == AttackType.DoS_Attack_Golden_Eye.value - 1).sum()),
-            AttackType.DoS_Attack_Slowloris.name: int((result == AttackType.DoS_Attack_Slowloris.value - 1).sum()),
-            AttackType.DDoS_Attack_LOIC_UDP.name: int((result == AttackType.DDoS_Attack_LOIC_UDP.value - 1).sum()),
-            AttackType.BruteForce_Web.name: int((result == AttackType.BruteForce_Web.value - 1).sum()),
-            AttackType.BruteForce_XSS.name: int((result == AttackType.BruteForce_XSS.value - 1).sum()),
-            AttackType.SQL_Injection.name: int((result == AttackType.SQL_Injection.value - 1).sum())
+            AttackType.Benign.name: int((result == AttackType.Benign.value).sum()),
+            AttackType.FTP_Bruteforce.name: int((result == AttackType.FTP_Bruteforce.value).sum()),
+            AttackType.SSH_BruteForce.name: int((result == AttackType.SSH_BruteForce.value).sum()),
+            AttackType.DDOS_Attack_HOIC.name: int((result == AttackType.DDOS_Attack_HOIC.value).sum()),
+            AttackType.Bot.name: int((result == AttackType.Bot.value).sum()),
+            AttackType.DoS_Attack_Golden_Eye.name: int((result == AttackType.DoS_Attack_Golden_Eye.value).sum()),
+            AttackType.DoS_Attack_Slowloris.name: int((result == AttackType.DoS_Attack_Slowloris.value).sum()),
+            AttackType.DDoS_Attack_LOIC_UDP.name: int((result == AttackType.DDoS_Attack_LOIC_UDP.value).sum()),
+            AttackType.BruteForce_Web.name: int((result == AttackType.BruteForce_Web.value).sum()),
+            AttackType.BruteForce_XSS.name: int((result == AttackType.BruteForce_XSS.value).sum()),
+            AttackType.SQL_Injection.name: int(
+                (result == AttackType.SQL_Injection.value).sum())
         }

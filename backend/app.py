@@ -67,7 +67,7 @@ def location():
 
 if __name__ == "__main__":
     app.config['FILE_UPLOAD'] = os.getcwd() + "/uploads/"
-    # app.debug = False
+    app.debug = True
     app.secret_key = '123'
     if not os.path.isdir(app.config['FILE_UPLOAD']):
         raise RuntimeError("Upload path does not exist")
