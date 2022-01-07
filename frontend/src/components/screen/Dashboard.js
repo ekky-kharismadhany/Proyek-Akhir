@@ -25,7 +25,7 @@ function DashboardScreen() {
     }, []);
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 90 },   
+        { field: 'id', headerName: 'ID', width: 90 },
         {
             field: 'Name',
             headerName: 'Activity Name',
@@ -45,7 +45,7 @@ function DashboardScreen() {
     }
     let parsed = parser(stats);
     let netActivity = getActivityCount(stats, true);
-    let attackActivity =  getActivityCount(stats, false);
+    let attackActivity = getActivityCount(stats, false);
 
 
     return (

@@ -9,6 +9,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 
 export default function ButtonAppBar() {
+
+    const [open, setOpen] = React.useState(false);
+
+    const drawerWidth = 240;
+
+    const handleOpenDrawer = () => {
+        setOpen(true);
+    }
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    }
+
     const dashboard = (
         <React.Fragment>
             <AppBar position="static">
@@ -18,7 +31,8 @@ export default function ButtonAppBar() {
                         edge="start"
                         color="inherit"
                         aria-label="menu"
-                        sx={{ mr: 2 }}
+                        onClick={handleOpenDrawer}
+                        sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
                         <MenuIcon />
                     </IconButton>
