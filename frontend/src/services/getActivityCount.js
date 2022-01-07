@@ -1,4 +1,4 @@
-export default function getActivityCount(obj, isBenignIncluded) {
+export function getActivityCount(obj, isBenignIncluded) {
     let values = Object.values(obj);
     let sum = 0;
     if (isBenignIncluded) {
@@ -12,4 +12,23 @@ export default function getActivityCount(obj, isBenignIncluded) {
         }
         return sum - Number(obj.Benign);
     }
+}
+
+export function getColumn() {
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 90 },   
+        {
+            field: 'Name',
+            headerName: 'Activity Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'Count',
+            headerName: 'Count',
+            width: 150,
+            editable: true,
+        },
+    ];
+    return columns;
 }
