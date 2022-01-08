@@ -1,14 +1,10 @@
-import {useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {CssBaseline, Divider, Drawer, Grid, IconButton, Toolbar, Typography } from "@mui/material";
+import { CssBaseline, Divider, Drawer, IconButton, Toolbar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { DataGrid } from '@mui/x-data-grid';
-import React, { useEffect, useState } from "react";
-import { getActivityCount, getColumn } from "../../services/getActivityCount";
-import parser from "../../services/parser";
-import OutlinedCard from "../Card";
+import React, { useState } from "react";
 import DrawerHeader from '../DrawerHeader';
 import AppBar from '../AppBar';
 import Main from '../Main';
@@ -16,21 +12,10 @@ import DrawerMenu from '../DrawerMenu';
 
 const drawerWidth = 240;
 
-function DashboardScreen() {
+export default function UploadCSVScreen() {
 
-    const [metric, setMetric] = useState('');
-    const [stats, setStats] = useState('');
     const [open, setOpen] = useState(false);
     const theme = useTheme();
-
-    function getData() {
-        fetch('http://localhost:5000/classification')
-            .then(response => response.json())
-            .then(data => {
-                setMetric(data.metric);
-                setStats(data.result);
-            });
-    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -39,18 +24,6 @@ function DashboardScreen() {
     const handleDrawerClose = () => {
         setOpen(false);
     }
-
-
-    useEffect(() => {
-        getData();
-    }, []);
-
-
-    let parsed = parser(stats);
-    let netActivity = getActivityCount(stats, true);
-    let attackActivity = getActivityCount(stats, false);
-    const columns = getColumn();
-
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -67,7 +40,7 @@ function DashboardScreen() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        Overview
+                        Upload CSV
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -93,27 +66,7 @@ function DashboardScreen() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
-                <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                        <OutlinedCard title="Network Activity" count={netActivity}></OutlinedCard>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <OutlinedCard title="Cyber Attack Activity" count={attackActivity}></OutlinedCard>
-                    </Grid>
-                </Grid>
-                <Grid>
-                    <div style={{ height: 400 }}>
-                        <DataGrid
-                            rows={parsed}
-                            columns={columns}
-                            checkboxSelection
-                            disableSelectionOnClick
-                        />
-                    </div>
-                </Grid>
             </Main>
         </Box>
     )
 }
-
-export default DashboardScreen;
