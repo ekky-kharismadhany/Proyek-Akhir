@@ -9,12 +9,15 @@ import DrawerHeader from '../DrawerHeader';
 import AppBar from '../AppBar';
 import Main from '../Main';
 import DrawerMenu from '../DrawerMenu';
+import upload from '../../services/upload';
 
 const drawerWidth = 240;
 
 export default function UploadCSVScreen() {
 
     const [open, setOpen] = useState(false);
+    const [selectedFile, setSelectedFile] = useState();
+    const [isFilePicked, setIsFilePicked] = useState(false);
     const theme = useTheme();
 
     const handleDrawerOpen = () => {
@@ -23,6 +26,15 @@ export default function UploadCSVScreen() {
 
     const handleDrawerClose = () => {
         setOpen(false);
+    }
+
+    const changeHandler = (event) => {
+        setSelectedFile(event.target.files[0]);
+        setIsFilePicked(true);
+    }
+
+    const handleUpload = () => {
+        upload(selectedFile);
     }
 
     return (
@@ -66,6 +78,25 @@ export default function UploadCSVScreen() {
             </Drawer>
             <Main open={open}>
                 <DrawerHeader />
+                <div>
+                    <input type="file" name="file" onChange={changeHandler} />
+                    {isFilePicked ? (
+                        <div>
+                            <p>Filename: {selectedFile.name}</p>
+                            <p>Filetype: {selectedFile.type}</p>
+                            <p>Size in bytes: {selectedFile.size}</p>
+                            <p>
+                                lastModifiedDate:{' '}
+                                {selectedFile.lastModifiedDate.toLocaleDateString()}
+                            </p>
+                        </div>
+                    ) : (
+                        <p>Select a file to show details</p>
+                    )}
+                    <div>
+                        <button onClick={handleUpload}>Submit</button>
+                    </div>
+                </div>
             </Main>
         </Box>
     )

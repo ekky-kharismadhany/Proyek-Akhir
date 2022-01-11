@@ -15,7 +15,7 @@ def index():
     return jsonify(welcome)
 
 
-@app.route("/classification/csv", methods=['GET', 'POST'])
+@app.route("/upload", methods=['GET', 'POST'])
 @cross_origin()
 def upload_csv():
     if request.method == 'POST':
